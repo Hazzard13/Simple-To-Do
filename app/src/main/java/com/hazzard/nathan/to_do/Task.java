@@ -1,7 +1,5 @@
 package com.hazzard.nathan.to_do;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**

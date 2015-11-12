@@ -32,12 +32,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Sets the floating action button to create new tasks
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent newTask = new Intent(MainActivity.this, NewTask.class);
-                //newTask.putParcelableArrayListExtra("taskList", taskList);
                 MainActivity.this.startActivity(newTask);
             }
         });
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    //Loads the task list fresh from memory every time control goes back to this activity
     @Override
     protected void onResume() {
         super.onResume();
@@ -64,12 +65,7 @@ public class MainActivity extends AppCompatActivity
         displayText.setText(taskText);
     }
 
-    public static ArrayList loadTaskList(String newMain) {
-        ArrayList list = new ArrayList();
-        list.add(new Task("Name", "Date", "Details"));
-        return list;
-    }
-
+    //Loads the taskList object from memory
     public ArrayList loadTaskList() {
         ArrayList list = new ArrayList();
         try {
