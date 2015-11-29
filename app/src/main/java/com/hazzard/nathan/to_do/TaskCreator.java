@@ -13,10 +13,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +35,7 @@ import java.util.GregorianCalendar;
 public class TaskCreator extends AppCompatActivity {
     public EditText taskName;
     public GregorianCalendar taskDate;
+    public int taskPriority;
     public EditText taskDetails;
     public ArrayList taskList;
     final String filename = "taskList";
@@ -51,6 +56,13 @@ public class TaskCreator extends AppCompatActivity {
 
         taskName = (EditText) findViewById(R.id.taskName);
         taskDetails = (EditText) findViewById(R.id.taskDetails);
+
+        Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(adapter);
+        prioritySpinner.setOnItemSelectedListener(new PriorityListener());
+        prioritySpinner.setSelection(2);
 
         //Sets the floating action button to call saveTask
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -136,6 +148,15 @@ public class TaskCreator extends AppCompatActivity {
 
     }
 
+    public class PriorityListener implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            taskPriority = pos;
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    }
+
     public void saveTask() {
         //Opens the list from memory
         taskList = new ArrayList();
@@ -150,7 +171,7 @@ public class TaskCreator extends AppCompatActivity {
         }
 
         //Creates the task and adds it to the list
-        Task createdTask = new Task(taskName.getText().toString(), taskDate, taskDetails.getText().toString());
+        Task createdTask = new Task(taskName.getText().toString(), taskDate, taskPriority, taskDetails.getText().toString());
         taskList.add(createdTask);
 
         //Saves the list back to memory and ends the activity
@@ -163,6 +184,7 @@ public class TaskCreator extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Toast.makeText(TaskCreator.this, "Task Saved", Toast.LENGTH_SHORT).show();
         this.finish();
     }
 }

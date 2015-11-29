@@ -9,10 +9,12 @@ public class Task implements Serializable {
     public String name;
     public GregorianCalendar date;
     public String details;
+    public int priority;
 
-    public Task(String cName, GregorianCalendar cDate, String cDetails){
+    public Task(String cName, GregorianCalendar cDate, int cPriority, String cDetails){
         name = cName;
         date = cDate;
+        priority = cPriority;
         details = cDetails;
     }
 
@@ -22,6 +24,10 @@ public class Task implements Serializable {
 
     public GregorianCalendar getDate() {
         return date;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     public String getDetails() {
@@ -109,7 +115,6 @@ public class Task implements Serializable {
         }
     }
 
-    //TODO compare dates properly
     static class DueDateComparator implements Comparator<Task>
     {
         public int compare(Task task1, Task task2)
@@ -120,12 +125,13 @@ public class Task implements Serializable {
         }
     }
 
-    //TODO compare priorities properly
     static class PriorityComparator implements Comparator<Task>
     {
         public int compare(Task task1, Task task2)
         {
-            return 0;
+            Integer p1 = task1.getPriority();
+            Integer p2 = task2.getPriority();
+            return p1 - p2;
         }
     }
 }

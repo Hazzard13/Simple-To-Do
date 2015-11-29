@@ -6,6 +6,8 @@
             android:title="Task Name" />
         <item android:id="@+id/sort_date"
             android:title="Due Date" />
+        <item android:id="@+id/sort_priority"
+            android:title="Priority" />
     </group>
 
     <item android:title="Communicate">

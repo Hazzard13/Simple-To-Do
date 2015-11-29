@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case "date":
                 Collections.sort(taskList, new Task.DueDateComparator());
                 break;
+            case "priority":
+                Collections.sort(taskList, new Task.PriorityComparator());
+                break;
             default:
                 break;
         }
@@ -138,13 +142,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId()) {
             case R.id.sort_name:
                 sortList("name");
-                displayList();
+                Toast.makeText(MainActivity.this, "Sorted Alphabetically", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_date:
                 sortList("date");
-                displayList();
+                Toast.makeText(MainActivity.this, "Sorted by Date", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sort_priority:
+                sortList("priority");
+                Toast.makeText(MainActivity.this, "Sorted by Priority", Toast.LENGTH_SHORT).show();
                 break;
         }
+        displayList();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
