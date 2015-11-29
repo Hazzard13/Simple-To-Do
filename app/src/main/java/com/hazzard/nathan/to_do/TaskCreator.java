@@ -18,7 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class NewTask extends AppCompatActivity {
+public class TaskCreator extends AppCompatActivity {
     public EditText taskName;
     public EditText taskDate;
     public EditText taskDetails;

@@ -3,7 +3,6 @@ package com.hazzard.nathan.to_do;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,12 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newTask = new Intent(MainActivity.this, NewTask.class);
+                Intent newTask = new Intent(MainActivity.this, TaskCreator.class);
                 MainActivity.this.startActivity(newTask);
             }
         });
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         taskList = loadTaskList();
+        sortList("name");
         TextView displayText = (TextView) findViewById(R.id.body);
         String taskText = "";
         for (int i = 0; i < taskList.size(); i++) {
@@ -78,6 +80,17 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
         }
         return list;
+    }
+
+    public void sortList(String sort)
+    {
+        switch (sort){
+            case "name":
+                Collections.sort(taskList, new Task.NameComparator());
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -117,7 +130,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_camara) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
