@@ -114,7 +114,9 @@ public class Task implements Serializable {
     {
         public int compare(Task task1, Task task2)
         {
-            return 0;
+            GregorianCalendar date1 = task1.getDate();
+            GregorianCalendar date2 = task2.getDate();
+            return date1.compareTo(date2);
         }
     }
 

@@ -21,8 +21,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<Task> taskList;
     final static String filename = "taskList";
 
@@ -59,12 +58,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         taskList = loadTaskList();
         sortList("name");
-        TextView displayText = (TextView) findViewById(R.id.body);
-        String taskText = "";
-        for (int i = 0; i < taskList.size(); i++) {
-            taskText += taskList.get(i).toString();
-        }
-        displayText.setText(taskText);
+        displayList();
     }
 
     //Loads the taskList object from memory
@@ -88,9 +82,21 @@ public class MainActivity extends AppCompatActivity
             case "name":
                 Collections.sort(taskList, new Task.NameComparator());
                 break;
+            case "date":
+                Collections.sort(taskList, new Task.DueDateComparator());
+                break;
             default:
                 break;
         }
+    }
+
+    public void displayList() {
+        TextView displayText = (TextView) findViewById(R.id.body);
+        String taskText = "";
+        for (int i = 0; i < taskList.size(); i++) {
+            taskText += taskList.get(i).toString();
+        }
+        displayText.setText(taskText);
     }
 
     @Override
@@ -129,19 +135,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch(item.getItemId()) {
+            case R.id.sort_name:
+                sortList("name");
+                displayList();
+                break;
+            case R.id.sort_date:
+                sortList("date");
+                displayList();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
