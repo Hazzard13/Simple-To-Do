@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_new_task" tools:context="com.hazzard.nathan.to_do.TaskCreator">
+    tools:showIn="@layout/activity_task_creator" tools:context="com.hazzard.nathan.to_do.TaskCreator">
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,12 +35,28 @@
         android:textColor="#444444">
     </TextView>
 
-    <EditText
-        android:layout_width="fill_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/taskDate"
-        android:inputType="textNoSuggestions">
-    </EditText>
+        android:onClick="showDatePickerDialog"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/enterTime"
+        android:text="@string/enter_time"
+        android:textSize="30dp"
+        android:textColor="#444444">
+    </TextView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/taskTime"
+        android:onClick="showTimePickerDialog"
+        />
 
     <TextView
         android:layout_width="wrap_content"

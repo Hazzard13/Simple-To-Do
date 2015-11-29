@@ -9,5 +9,6 @@
 
     <string name="enter_name">Task Name</string>
     <string name="enter_date">Task Date</string>
+    <string name="enter_time">Set notification time</string>
     <string name="enter_details">Task Details</string>
 </resources>

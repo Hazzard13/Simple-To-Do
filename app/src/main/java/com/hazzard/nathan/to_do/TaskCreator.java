@@ -1,5 +1,9 @@
 package com.hazzard.nathan.to_do;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,8 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,10 +25,12 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class TaskCreator extends AppCompatActivity {
     public EditText taskName;
-    public EditText taskDate;
+    public GregorianCalendar taskDate;
     public EditText taskDetails;
     public ArrayList taskList;
     final String filename = "taskList";
@@ -28,13 +38,18 @@ public class TaskCreator extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_task);
+        setContentView(R.layout.activity_task_creator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("New Task");
 
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        setTaskDate(new GregorianCalendar(year, month, day));
+
         taskName = (EditText) findViewById(R.id.taskName);
-        taskDate = (EditText) findViewById(R.id.taskDate);
         taskDetails = (EditText) findViewById(R.id.taskDetails);
 
         //Sets the floating action button to call saveTask
@@ -49,10 +64,12 @@ public class TaskCreator extends AppCompatActivity {
         //Listener for the task name
         taskName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             //Changes the title to match the task name
             @Override
@@ -60,6 +77,63 @@ public class TaskCreator extends AppCompatActivity {
                 setTitle(s.toString());
             }
         });
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void setTaskDate(GregorianCalendar date){
+        taskDate = date;
+        ((Button) findViewById(R.id.taskDate)).setText(Task.printDate(taskDate));
+    }
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = ((TaskCreator) getActivity()).taskDate;
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            ((TaskCreator) getActivity()).setTaskDate(new GregorianCalendar(year, month, day));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+        }
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+        }
+
     }
 
     public void saveTask() {
@@ -76,7 +150,7 @@ public class TaskCreator extends AppCompatActivity {
         }
 
         //Creates the task and adds it to the list
-        Task createdTask = new Task(taskName.getText().toString(), taskDate.getText().toString(), taskDetails.getText().toString());
+        Task createdTask = new Task(taskName.getText().toString(), taskDate, taskDetails.getText().toString());
         taskList.add(createdTask);
 
         //Saves the list back to memory and ends the activity
