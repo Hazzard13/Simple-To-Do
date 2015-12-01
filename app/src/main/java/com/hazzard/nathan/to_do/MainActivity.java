@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +30,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //displayText is where all the tasks are currently listed
         TextView displayText = (TextView) findViewById(R.id.body);
         displayText.setMovementMethod(new ScrollingMovementMethod());
+
+        //This adds the navpane to the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //Does some android magic around the navpane
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return list;
     }
 
+    //Sorts the taskList according to a selection of comparators, chosen by the value of sort
     public void sortList(String sort)
     {
         switch (sort){
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //iterates through taskList and adds every Task to displayText
     public void displayList() {
         TextView displayText = (TextView) findViewById(R.id.body);
         String taskText = "";
@@ -106,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         displayText.setText(taskText);
     }
 
+    //Overrides the back button to close the navpane if it's open
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -116,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Android magic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //Definitely more Android magic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -138,10 +146,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    //This is where the navpane items are defined
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        //Called when an nav option is clicked, this determines what option was chosen, and reacts
+        //Currently only calls my sort operations
         switch(item.getItemId()) {
             case R.id.sort_name:
                 sortList("name");
@@ -156,8 +166,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, "Sorted by Priority", Toast.LENGTH_SHORT).show();
                 break;
         }
+        //Refreshes the displayList after it's sorted
         displayList();
 
+        //Closes the navpane afterwards
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
