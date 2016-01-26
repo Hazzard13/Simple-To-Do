@@ -25,11 +25,13 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<Task> taskList;
     final static String filename = "taskList";
+    public Notifier notifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        notifier = new Notifier(this);
 
         //displayText is where all the tasks are currently listed
         TextView displayText = (TextView) findViewById(R.id.body);
@@ -64,8 +66,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         taskList = loadTaskList();
+        //TODO implement a method to sortList by whatever it was last sorted by (Probably Preferences)
         sortList("name");
         displayList();
+        //TODO remove this test
+        notifier.taskNotification(taskList.get(0));
     }
 
     //Loads the taskList object from memory

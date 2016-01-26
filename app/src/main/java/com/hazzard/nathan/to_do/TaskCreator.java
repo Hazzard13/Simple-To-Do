@@ -115,7 +115,7 @@ public class TaskCreator extends AppCompatActivity {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
+            // Returns the user's selected date
             ((TaskCreator) getActivity()).setTaskDate(new GregorianCalendar(year, month, day));
         }
 
@@ -138,8 +138,7 @@ public class TaskCreator extends AppCompatActivity {
             int minute = c.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

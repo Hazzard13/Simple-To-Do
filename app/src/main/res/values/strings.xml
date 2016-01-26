@@ -10,7 +10,7 @@
     <string name="enter_name">Task Name</string>
     <string name="enter_date">Task Date</string>
     <string name="enter_time">Set notification time</string>
-    <string name="enter_priority">Task Priority time</string>
+    <string name="enter_priority">Task Priority</string>
     <string name="enter_details">Task Description</string>
 
     <string-array name="priority_array">

@@ -131,7 +131,7 @@ public class Task implements Serializable {
         {
             Integer p1 = task1.getPriority();
             Integer p2 = task2.getPriority();
-            return p1 - p2;
+            return p2 - p1;
         }
     }
 }
