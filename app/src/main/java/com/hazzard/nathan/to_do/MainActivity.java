@@ -25,13 +25,13 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<Task> taskList;
     final static String filename = "taskList";
-    public Notifier notifier;
+    public NotificationHandler notifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        notifier = new Notifier(this);
+        notifier = new NotificationHandler(this);
 
         //displayText is where all the tasks are currently listed
         TextView displayText = (TextView) findViewById(R.id.body);

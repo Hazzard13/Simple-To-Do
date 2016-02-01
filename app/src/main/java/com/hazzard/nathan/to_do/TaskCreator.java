@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +64,16 @@ public class TaskCreator extends AppCompatActivity {
         prioritySpinner.setAdapter(adapter);
         prioritySpinner.setOnItemSelectedListener(new PriorityListener());
         prioritySpinner.setSelection(2);
+
+        //Loads the details from a passed Task if one is present
+        Intent intent = getIntent();
+        if (intent.hasExtra("Task")) {
+            Task task = (Task) getIntent().getSerializableExtra("Task");
+            taskName.setText(task.getName());
+            setTaskDate(task.getDate());
+            taskDetails.setText(task.getDetails());
+            taskPriority = task.getPriority();
+        }
 
         //Sets the floating action button to call saveTask
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
