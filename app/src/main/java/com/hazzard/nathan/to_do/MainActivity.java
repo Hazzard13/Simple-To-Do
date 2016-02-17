@@ -1,5 +1,6 @@
 package com.hazzard.nathan.to_do;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -63,17 +64,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        taskList = loadTaskList();
+        taskList = loadTaskList(this);
         //TODO implement a method to sortList by whatever it was last sorted by (Probably Preferences)
         sortList("name");
         displayList();
     }
 
     //Loads the taskList object from memory
-    public ArrayList loadTaskList() {
+    public static ArrayList loadTaskList(Context context) {
         ArrayList list = new ArrayList();
         try {
-            FileInputStream inputStream = openFileInput(filename);
+            FileInputStream inputStream = context.openFileInput(filename);
             byte[] byteBuffer = new byte[inputStream.available()];
             inputStream.read(byteBuffer);
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteBuffer);

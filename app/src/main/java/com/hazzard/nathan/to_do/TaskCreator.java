@@ -187,16 +187,7 @@ public class TaskCreator extends AppCompatActivity {
 
     public void saveTask() {
         //Opens the list from memory
-        taskList = new ArrayList();
-        try {
-            FileInputStream inputStream = openFileInput(filename);
-            byte[] byteBuffer = new byte[inputStream.available()];
-            inputStream.read(byteBuffer);
-            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteBuffer);
-            ObjectInputStream objectIn = new ObjectInputStream(byteIn);
-            taskList = (ArrayList) objectIn.readObject();
-        } catch (Exception e) {
-        }
+        taskList = MainActivity.loadTaskList(this);
 
         //Creates the task and adds it to the list
         Task createdTask = new Task(taskName.getText().toString(), taskDate, taskPriority, taskDetails.getText().toString(), taskRequestCode);
