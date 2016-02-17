@@ -10,12 +10,14 @@ public class Task implements Serializable {
     public GregorianCalendar date;
     public String details;
     public int priority;
+    public int requestCode;
 
-    public Task(String cName, GregorianCalendar cDate, int cPriority, String cDetails){
+    public Task(String cName, GregorianCalendar cDate, int cPriority, String cDetails, int cRequestCode){
         name = cName;
         date = cDate;
         priority = cPriority;
         details = cDetails;
+        requestCode = cRequestCode;
     }
 
     public String getName() {
@@ -32,6 +34,10 @@ public class Task implements Serializable {
 
     public String getDetails() {
         return details;
+    }
+
+    public int getRequestCode() {
+        return requestCode;
     }
 
     public String toString() {
@@ -103,6 +109,32 @@ public class Task implements Serializable {
         }
         printDate += date.get(Calendar.DAY_OF_MONTH);
         return printDate;
+    }
+
+    public static String printTime(GregorianCalendar date) {
+        String printTime = "";
+        switch (date.get(Calendar.HOUR)) {
+            case 0:
+                printTime += 12;
+                break;
+            default:
+                printTime += date.get(Calendar.HOUR);
+                break;
+        }
+        printTime += ":";
+        if (date.get(Calendar.MINUTE) < 10) {
+            printTime += 0;
+        }
+        printTime += date.get(Calendar.MINUTE);
+        switch (date.get(Calendar.AM_PM)) {
+            case 0:
+                printTime += "AM";
+                break;
+            case 1:
+                printTime += "PM";
+                break;
+        }
+        return printTime;
     }
 
     static class NameComparator implements Comparator<Task>

@@ -32,12 +32,14 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 public class TaskCreator extends AppCompatActivity {
     public EditText taskName;
     public GregorianCalendar taskDate;
     public int taskPriority;
     public EditText taskDetails;
+    public int taskRequestCode;
     public ArrayList taskList;
     final String filename = "taskList";
 
@@ -53,10 +55,12 @@ public class TaskCreator extends AppCompatActivity {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        setTaskDate(new GregorianCalendar(year, month, day));
+        taskDate = new GregorianCalendar(year, month, day);
 
         taskName = (EditText) findViewById(R.id.taskName);
         taskDetails = (EditText) findViewById(R.id.taskDetails);
+
+        taskRequestCode = (new Random()).nextInt();
 
         Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
@@ -70,10 +74,14 @@ public class TaskCreator extends AppCompatActivity {
         if (intent.hasExtra("Task")) {
             Task task = (Task) getIntent().getSerializableExtra("Task");
             taskName.setText(task.getName());
-            setTaskDate(task.getDate());
+            taskDate = task.getDate();
             taskDetails.setText(task.getDetails());
             taskPriority = task.getPriority();
+            taskRequestCode = task.getRequestCode();
         }
+
+        //Displays the date on the date button
+        updateButtonTimes();
 
         //Sets the floating action button to call saveTask
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -107,9 +115,16 @@ public class TaskCreator extends AppCompatActivity {
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    public void setTaskDate(GregorianCalendar date){
-        taskDate = date;
+    public void updateButtonTimes() {
         ((Button) findViewById(R.id.taskDate)).setText(Task.printDate(taskDate));
+        ((Button) findViewById(R.id.taskTime)).setText(Task.printTime(taskDate));
+    }
+
+    public void updateTaskDate(int year, int month, int day){
+        taskDate.set(taskDate.YEAR, year);
+        taskDate.set(taskDate.MONTH, month);
+        taskDate.set(taskDate.DATE, day);
+        updateButtonTimes();
     }
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -127,11 +142,7 @@ public class TaskCreator extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Returns the user's selected date
-            ((TaskCreator) getActivity()).setTaskDate(new GregorianCalendar(year, month, day));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            ((TaskCreator) getActivity()).updateTaskDate(year, month, day);
         }
     }
 
@@ -140,11 +151,17 @@ public class TaskCreator extends AppCompatActivity {
         newFragment.show(getFragmentManager(), "timePicker");
     }
 
+    public void updateTaskTime(int hour, int minute){
+        taskDate.set(taskDate.HOUR_OF_DAY, hour);
+        taskDate.set(taskDate.MINUTE, minute);
+        updateButtonTimes();
+    }
+
     public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
+            final Calendar c = ((TaskCreator) getActivity()).taskDate;
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
@@ -154,6 +171,7 @@ public class TaskCreator extends AppCompatActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
+            ((TaskCreator) getActivity()).updateTaskTime(hourOfDay, minute);
         }
 
     }
@@ -181,8 +199,11 @@ public class TaskCreator extends AppCompatActivity {
         }
 
         //Creates the task and adds it to the list
-        Task createdTask = new Task(taskName.getText().toString(), taskDate, taskPriority, taskDetails.getText().toString());
+        Task createdTask = new Task(taskName.getText().toString(), taskDate, taskPriority, taskDetails.getText().toString(), taskRequestCode);
         taskList.add(createdTask);
+
+        //Sends a notification to the Android alarm handler
+        (new NotificationHandler(this)).taskNotification(createdTask);
 
         //Saves the list back to memory and ends the activity
         try {

@@ -23,10 +23,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Intent viewIntent = new Intent(context, TaskCreator.class);
         viewIntent.putExtra("Task", task);
-        PendingIntent pViewIntent = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pViewIntent = PendingIntent.getActivity(context, task.getRequestCode(), viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(R.mipmap.ic_launcher, "View", pViewIntent);
         Notification notification = builder.build();
 
-        manager.notify(0, notification);
+        manager.notify(task.getRequestCode(), notification);
     }
 }
