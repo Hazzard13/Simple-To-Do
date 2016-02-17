@@ -25,9 +25,11 @@ public class NotificationRefresh extends BroadcastReceiver {
         }
 
         NotificationHandler notifier = new NotificationHandler(context);
+        long currentTime = System.currentTimeMillis();
         for (int i = 0; i < taskList.size(); i++) {
-            //TODO Add a test to make sure the notification hasn't already gone offNotification
-            notifier.taskNotification((Task) taskList.get(i));
+            if(currentTime < ((Task) taskList.get(i)).getDate().getTimeInMillis()) {
+                notifier.taskNotification((Task) taskList.get(i));
+            }
         }
     }
 }
