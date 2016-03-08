@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //displayText is where all the tasks are currently listed
-        TextView displayText = (TextView) findViewById(R.id.body);
-        displayText.setMovementMethod(new ScrollingMovementMethod());
 
         //This adds the navpane to the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,12 +101,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //iterates through taskList and adds every Task to displayText
     public void displayList() {
-        TextView displayText = (TextView) findViewById(R.id.body);
-        String taskText = "";
-        for (int i = 0; i < taskList.size(); i++) {
-            taskText += taskList.get(i).toString();
-        }
-        displayText.setText(taskText);
+        ListView displayList = (ListView) findViewById(R.id.body);
+        displayList.setAdapter(new TaskAdapter(this, taskList));
+        displayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                Intent viewTask = new Intent(view.getContext(), TaskCreator.class);
+                viewTask.putExtra("Task", taskList.get(position));
+                startActivity(viewTask);
+            }
+        });
     }
 
     //Overrides the back button to close the navpane if it's open
@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //Android magic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -132,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //Definitely more Android magic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

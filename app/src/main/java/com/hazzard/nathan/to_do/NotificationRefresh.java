@@ -13,11 +13,8 @@ public class NotificationRefresh extends BroadcastReceiver {
         ArrayList taskList = MainActivity.loadTaskList(context);
 
         NotificationHandler notifier = new NotificationHandler(context);
-        long currentTime = System.currentTimeMillis();
         for (int i = 0; i < taskList.size(); i++) {
-            if(currentTime < ((Task) taskList.get(i)).getDate().getTimeInMillis()) {
-                notifier.taskNotification((Task) taskList.get(i));
-            }
+            notifier.taskNotification((Task) taskList.get(i));
         }
     }
 }

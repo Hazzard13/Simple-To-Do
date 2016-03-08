@@ -18,9 +18,11 @@ public class NotificationHandler {
     }
 
     public void taskNotification(Task task) {
-        Intent notificationHolder = new Intent(CONTEXT, com.hazzard.nathan.to_do.AlarmReceiver.class);
-        notificationHolder.putExtra("Task", task);
-        PendingIntent NotificationIntent = PendingIntent.getBroadcast(CONTEXT, task.getRequestCode(), notificationHolder, 0);
-        alarmManager.set(alarmManager.RTC_WAKEUP, task.getDate().getTimeInMillis(), NotificationIntent);
+        if(System.currentTimeMillis() < task.getDate().getTimeInMillis()) {
+            Intent notificationHolder = new Intent(CONTEXT, com.hazzard.nathan.to_do.AlarmReceiver.class);
+            notificationHolder.putExtra("Task", task);
+            PendingIntent NotificationIntent = PendingIntent.getBroadcast(CONTEXT, task.getRequestCode(), notificationHolder, 0);
+            alarmManager.set(alarmManager.RTC_WAKEUP, task.getDate().getTimeInMillis(), NotificationIntent);
+        }
     }
 }

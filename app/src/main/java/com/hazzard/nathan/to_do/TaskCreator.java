@@ -23,11 +23,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,7 +37,7 @@ public class TaskCreator extends AppCompatActivity {
     public int taskPriority;
     public EditText taskDetails;
     public int taskRequestCode;
-    public ArrayList taskList;
+    public ArrayList<Task> taskList;
     final String filename = "taskList";
 
     @Override
@@ -188,6 +185,13 @@ public class TaskCreator extends AppCompatActivity {
     public void saveTask() {
         //Opens the list from memory
         taskList = MainActivity.loadTaskList(this);
+
+        //Removes any previous versions of this task before saving it
+        for (int i = 0; i < taskList.size(); i++) {
+            if(taskList.get(i).getRequestCode() == taskRequestCode) {
+                taskList.remove(i);
+            }
+        }
 
         //Creates the task and adds it to the list
         Task createdTask = new Task(taskName.getText().toString(), taskDate, taskPriority, taskDetails.getText().toString(), taskRequestCode);
