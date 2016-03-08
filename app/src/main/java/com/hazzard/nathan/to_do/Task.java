@@ -7,16 +7,16 @@ import java.util.GregorianCalendar;
 public class Task implements Serializable {
     public String name;
     public GregorianCalendar date;
-    public String details;
     public int priority;
+    public String details;
     public int requestCode;
 
-    public Task(String cName, GregorianCalendar cDate, int cPriority, String cDetails, int cRequestCode){
-        name = cName;
-        date = cDate;
-        priority = cPriority;
-        details = cDetails;
-        requestCode = cRequestCode;
+    public Task(String Name, GregorianCalendar Date, int Priority, String Details, int RequestCode){
+        this.name = Name;
+        this.date = Date;
+        this.priority = Priority;
+        this.details = Details;
+        this.requestCode = RequestCode;
     }
 
     public String getName() {

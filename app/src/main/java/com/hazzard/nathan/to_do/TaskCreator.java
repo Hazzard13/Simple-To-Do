@@ -69,6 +69,7 @@ public class TaskCreator extends AppCompatActivity {
             taskDate = task.getDate();
             taskDetails.setText(task.getDetails());
             taskPriority = task.getPriority();
+            prioritySpinner.setSelection(taskPriority);
             taskRequestCode = task.getRequestCode();
         }
 
