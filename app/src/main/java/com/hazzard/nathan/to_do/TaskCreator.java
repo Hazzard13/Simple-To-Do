@@ -201,15 +201,7 @@ public class TaskCreator extends AppCompatActivity {
         (new NotificationHandler(this)).taskNotification(createdTask);
 
         //Saves the list back to memory and ends the activity
-        try {
-            FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            ObjectOutputStream objectOut = new ObjectOutputStream(byteOut);
-            objectOut.writeObject(taskList);
-            outputStream.write(byteOut.toByteArray());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MainActivity.saveTaskList(this, taskList);
         Toast.makeText(TaskCreator.this, "Task Saved", Toast.LENGTH_SHORT).show();
         this.finish();
     }

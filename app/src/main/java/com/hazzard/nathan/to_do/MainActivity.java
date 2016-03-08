@@ -1,6 +1,8 @@
 package com.hazzard.nathan.to_do;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,12 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         displayList();
     }
 
+    //TODO Move these three functions to a separate class
     //Loads the taskList object from memory
     public static ArrayList loadTaskList(Context context) {
         ArrayList list = new ArrayList();
@@ -79,6 +86,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
         }
         return list;
+    }
+
+    public static void saveTaskList(Context context, ArrayList taskList) {
+        try {
+            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream objectOut = new ObjectOutputStream(byteOut);
+            objectOut.writeObject(taskList);
+            outputStream.write(byteOut.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Sorts the taskList according to a selection of comparators, chosen by the value of sort
@@ -109,6 +128,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent viewTask = new Intent(view.getContext(), TaskCreator.class);
                 viewTask.putExtra("Task", taskList.get(position));
                 startActivity(viewTask);
+            }
+        });
+        displayList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+                final AlertDialog deleteAlert = new AlertDialog.Builder(parent.getContext()).create();
+                deleteAlert.setTitle("Delete?");
+                deleteAlert.setMessage("Are you sure you want to delete " + taskList.get(position).getName() + "?");
+                deleteAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        taskList.remove(position);
+                        MainActivity.saveTaskList(parent.getContext(), taskList);
+                        ((TaskAdapter) parent.getAdapter()).notifyDataSetChanged();
+                    }
+                });
+                deleteAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                deleteAlert.show();
+                return true;
             }
         });
     }
