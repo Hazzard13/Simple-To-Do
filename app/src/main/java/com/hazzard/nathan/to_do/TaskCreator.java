@@ -38,7 +38,6 @@ public class TaskCreator extends AppCompatActivity {
     public EditText taskDetails;
     public int taskRequestCode;
     public ArrayList<Task> taskList;
-    final String filename = "taskList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +183,7 @@ public class TaskCreator extends AppCompatActivity {
 
     public void saveTask() {
         //Opens the list from memory
-        taskList = MainActivity.loadTaskList(this);
+        taskList = TaskListManager.loadTaskList(this);
 
         //Removes any previous versions of this task before saving it
         for (int i = 0; i < taskList.size(); i++) {
@@ -201,7 +200,7 @@ public class TaskCreator extends AppCompatActivity {
         (new NotificationHandler(this)).taskNotification(createdTask);
 
         //Saves the list back to memory and ends the activity
-        MainActivity.saveTaskList(this, taskList);
+        TaskListManager.saveTaskList(this, taskList);
         Toast.makeText(TaskCreator.this, "Task Saved", Toast.LENGTH_SHORT).show();
         this.finish();
     }

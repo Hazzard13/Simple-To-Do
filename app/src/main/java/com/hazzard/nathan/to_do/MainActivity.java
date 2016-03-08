@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,7 +30,6 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<Task> taskList;
-    final static String filename = "taskList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,56 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        taskList = loadTaskList(this);
-        //TODO implement a method to sortList by whatever it was last sorted by (Probably Preferences)
-        sortList("name");
+        taskList = TaskListManager.loadTaskList(this);
+        //TODO implement a method to sortTaskList by whatever it was last sorted by (Probably Preferences)
+        taskList = TaskListManager.sortTaskList(TaskListManager.NAME, taskList);
         displayList();
-    }
-
-    //TODO Move these three functions to a separate class
-    //Loads the taskList object from memory
-    public static ArrayList loadTaskList(Context context) {
-        ArrayList list = new ArrayList();
-        try {
-            FileInputStream inputStream = context.openFileInput(filename);
-            byte[] byteBuffer = new byte[inputStream.available()];
-            inputStream.read(byteBuffer);
-            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteBuffer);
-            ObjectInputStream objectIn = new ObjectInputStream(byteIn);
-            list = (ArrayList) objectIn.readObject();
-        } catch (Exception e) {
-        }
-        return list;
-    }
-
-    public static void saveTaskList(Context context, ArrayList taskList) {
-        try {
-            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            ObjectOutputStream objectOut = new ObjectOutputStream(byteOut);
-            objectOut.writeObject(taskList);
-            outputStream.write(byteOut.toByteArray());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Sorts the taskList according to a selection of comparators, chosen by the value of sort
-    public void sortList(String sort)
-    {
-        switch (sort){
-            case "name":
-                Collections.sort(taskList, new Task.NameComparator());
-                break;
-            case "date":
-                Collections.sort(taskList, new Task.DueDateComparator());
-                break;
-            case "priority":
-                Collections.sort(taskList, new Task.PriorityComparator());
-                break;
-            default:
-                break;
-        }
     }
 
     //iterates through taskList and adds every Task to displayText
@@ -140,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         taskList.remove(position);
-                        MainActivity.saveTaskList(parent.getContext(), taskList);
+                        TaskListManager.saveTaskList(parent.getContext(), taskList);
                         ((TaskAdapter) parent.getAdapter()).notifyDataSetChanged();
                     }
                 });
@@ -197,15 +149,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Currently only calls my sort operations
         switch(item.getItemId()) {
             case R.id.sort_name:
-                sortList("name");
+                taskList = TaskListManager.sortTaskList(TaskListManager.NAME, taskList);
                 Toast.makeText(MainActivity.this, "Sorted Alphabetically", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_date:
-                sortList("date");
+                taskList = TaskListManager.sortTaskList(TaskListManager.DATE, taskList);
                 Toast.makeText(MainActivity.this, "Sorted by Date", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_priority:
-                sortList("priority");
+                taskList = TaskListManager.sortTaskList(TaskListManager.PRIORITY, taskList);
                 Toast.makeText(MainActivity.this, "Sorted by Priority", Toast.LENGTH_SHORT).show();
                 break;
         }
