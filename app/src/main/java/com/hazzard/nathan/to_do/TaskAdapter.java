@@ -32,7 +32,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         imageView.setImageResource(R.mipmap.ic_launcher);
         Title.setText(task.getName());
-        Date.setText(Task.printDate(task.getDate()) + ", " + Task.printTime(task.getDate()));
+        Date.setText(DateFormatter.printDate(task.getDate()) + " at " + DateFormatter.printTime(task.getDate()));
 
         return taskView;
     }

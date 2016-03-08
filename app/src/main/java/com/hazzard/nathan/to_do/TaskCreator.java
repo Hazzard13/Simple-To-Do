@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,9 +22,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -112,8 +108,8 @@ public class TaskCreator extends AppCompatActivity {
     }
 
     public void updateButtonTimes() {
-        ((Button) findViewById(R.id.taskDate)).setText(Task.printDate(taskDate));
-        ((Button) findViewById(R.id.taskTime)).setText(Task.printTime(taskDate));
+        ((Button) findViewById(R.id.taskDate)).setText(DateFormatter.printDate(taskDate));
+        ((Button) findViewById(R.id.taskTime)).setText(DateFormatter.printTime(taskDate));
     }
 
     public void updateTaskDate(int year, int month, int day){

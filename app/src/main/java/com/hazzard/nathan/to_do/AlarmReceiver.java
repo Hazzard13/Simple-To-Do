@@ -19,7 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setVibrate(new long[] {0, 200});
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentTitle(task.getName());
-        builder.setContentText(task.printDate(task.getDate()));
+        builder.setContentText(DateFormatter.printDate(task.getDate()));
 
         Intent viewIntent = new Intent(context, TaskCreator.class);
         viewIntent.putExtra("Task", task);
