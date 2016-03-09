@@ -30,7 +30,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView Title = (TextView) taskView.findViewById(R.id.firstLine);
         TextView Date = (TextView) taskView.findViewById(R.id.secondLine);
 
-        imageView.setImageResource(R.mipmap.ic_launcher);
+        imageView.setImageResource(R.drawable.checkmark);
         Title.setText(task.getName());
         Date.setText(DateFormatter.printDate(task.getDate()) + " at " + DateFormatter.printTime(task.getDate()));
 
