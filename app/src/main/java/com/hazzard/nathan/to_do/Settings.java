@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class Settings extends AppCompatActivity {
     final static String SORT_KEY = "defaultSort";
+    final static String RINGTONE_KEY = "ringtone";
+    final static String VIBRATE_KEY = "vibrate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

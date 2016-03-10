@@ -7,4 +7,17 @@
         android:entryValues="@array/defaultSort"
         android:defaultValue="@string/defaultSortMethod"
         ></ListPreference>
+
+    <RingtonePreference
+        android:title="Notification Sound"
+        android:key="ringtone"
+        android:showDefault="true"
+        android:ringtoneType="notification"
+        ></RingtonePreference>
+
+    <CheckBoxPreference
+        android:title="Vibration"
+        android:key="vibrate"
+        android:defaultValue="true"
+        ></CheckBoxPreference>
 </PreferenceScreen>
