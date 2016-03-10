@@ -13,11 +13,5 @@
     <string name="enter_priority">Task Priority</string>
     <string name="enter_details">Task Description</string>
 
-    <string-array name="priority_array">
-        <item>None</item>
-        <item>Low</item>
-        <item>Normal</item>
-        <item>High</item>
-        <item>ASAP</item>
-    </string-array>
+    <string name="defaultSortMethod">"Date"</string>
 </resources>

@@ -106,9 +106,9 @@ public class TaskListManager {
         }
     }
 
-    final static String NAME = "name";
-    final static String DATE = "date";
-    final static String PRIORITY = "priority";
+    final static String NAME = "Name";
+    final static String DATE = "Date";
+    final static String PRIORITY = "Priority";
 
     //Sorts the taskList according to a selection of comparators, chosen by the value of sort
     public static ArrayList<Task> sortTaskList(String sort, ArrayList<Task> taskList)
