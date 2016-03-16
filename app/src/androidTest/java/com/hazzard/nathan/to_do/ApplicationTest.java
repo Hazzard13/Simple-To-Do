@@ -22,17 +22,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         storedTaskList = TaskListManager.loadTaskList(main);
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        TaskListManager.saveTaskList(main, storedTaskList);
+        super.tearDown();
+    }
+
     public void testSaveAndLoadTaskList() {
         ArrayList <Task> taskList = new ArrayList<Task>();
         taskList.add(new Task("Sample1", new GregorianCalendar(), 2, "", 0));
         taskList.add(new Task("Sample2", new GregorianCalendar(), 2, "", 0));
         TaskListManager.saveTaskList(main, taskList);
         assert taskList.equals(TaskListManager.loadTaskList(main));
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        TaskListManager.saveTaskList(main, storedTaskList);
     }
 }
