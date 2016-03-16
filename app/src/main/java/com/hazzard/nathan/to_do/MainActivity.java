@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 deleteAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        NotificationHandler.clearNotification(parent.getContext(), taskList.get(position));
                         taskList.remove(position);
                         TaskListManager.saveTaskList(parent.getContext(), taskList);
                         ((TaskAdapter) parent.getAdapter()).notifyDataSetChanged();
