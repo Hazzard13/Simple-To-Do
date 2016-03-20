@@ -10,11 +10,17 @@ public class NotificationRefresh extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //Reads in the taskList
-        ArrayList taskList = TaskListManager.loadTaskList(context);
+        ArrayList<Task> taskList = TaskListManager.loadTaskList(context);
 
         NotificationHandler notifier = new NotificationHandler(context);
         for (int i = 0; i < taskList.size(); i++) {
-            notifier.taskNotification((Task) taskList.get(i));
+            Task task = taskList.get(i);
+            if(task.repeats()) {
+                while (task.getTimeList().get(0).getTimeInMillis() < System.currentTimeMillis()) {
+                    task.repeat();
+                }
+            }
+            notifier.taskNotification(task);
         }
     }
 }

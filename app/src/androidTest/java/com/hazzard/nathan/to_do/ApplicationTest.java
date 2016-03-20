@@ -31,8 +31,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testSaveAndLoadTaskList() {
         ArrayList <Task> taskList = new ArrayList<Task>();
-        taskList.add(new Task("Sample1", new ArrayList<>(Arrays.asList(new GregorianCalendar[] {new GregorianCalendar()})), 1, "Sample1", new ArrayList<>(Arrays.asList(new Integer[] {1}))));
-        taskList.add(new Task("Sample2", new ArrayList<>(Arrays.asList(new GregorianCalendar[] {new GregorianCalendar()})), 2, "Sample2",new ArrayList<>(Arrays.asList(new Integer[] {2}))));
+        taskList.add(new Task("Sample1", new ArrayList<>(Arrays.asList(new GregorianCalendar[] {new GregorianCalendar()})), 0, 1, "Sample1", new ArrayList<>(Arrays.asList(new Integer[] {1}))));
+        taskList.add(new Task("Sample2", new ArrayList<>(Arrays.asList(new GregorianCalendar[] {new GregorianCalendar()})), 0, 2, "Sample2",new ArrayList<>(Arrays.asList(new Integer[] {2}))));
         TaskListManager.saveTaskList(main, taskList);
         assert taskList.equals(TaskListManager.loadTaskList(main));
     }

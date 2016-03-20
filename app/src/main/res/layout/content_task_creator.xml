@@ -44,6 +44,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/enterRepeating"
+        android:text="@string/enter_repeating"
+        android:textSize="30dp"
+        android:textColor="#444444">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/repeating_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/enterPriority"
         android:text="@string/enter_priority"
         android:textSize="30dp"

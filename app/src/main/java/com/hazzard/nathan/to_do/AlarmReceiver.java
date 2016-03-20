@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -34,5 +36,23 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = builder.build();
 
         manager.notify(requestCode, notification);
+
+        if (task.repeats()) {
+            task.repeat();
+
+            ArrayList<Task> taskList = TaskListManager.loadTaskList(context);
+            //Removes any previous versions of this task before saving it
+            for (int i = 0; i < taskList.size(); i++) {
+                if(taskList.get(i).getRequestCodes().get(0).equals(task.getRequestCodes().get(0))) {
+                    NotificationHandler.clearNotification(context, taskList.get(i));
+                    taskList.remove(i);
+                }
+            }
+
+            //Saves the updated task and creates its notification
+            taskList.add(task);
+            (new NotificationHandler(context)).taskNotification(task);
+            TaskListManager.saveTaskList(context, taskList);
+        }
     }
 }

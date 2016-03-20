@@ -30,6 +30,7 @@ import java.util.Random;
 public class TaskCreator extends AppCompatActivity {
     public EditText taskName;
     public ArrayList<GregorianCalendar> timeList;
+    public int taskRepeating;
     public int taskPriority;
     public EditText taskDetails;
     public ArrayList<Integer> taskRequestCodes;
@@ -50,11 +51,18 @@ public class TaskCreator extends AppCompatActivity {
         taskName = (EditText) findViewById(R.id.taskName);
         taskDetails = (EditText) findViewById(R.id.taskDetails);
         Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        prioritySpinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(priorityAdapter);
         prioritySpinner.setOnItemSelectedListener(new PriorityListener());
         prioritySpinner.setSelection(2);
+
+        Spinner repeatingSpinner = (Spinner) findViewById(R.id.repeating_spinner);
+        ArrayAdapter<CharSequence> repeatingAdapter = ArrayAdapter.createFromResource(this, R.array.repeating_array, android.R.layout.simple_spinner_item);
+        repeatingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatingSpinner.setAdapter(repeatingAdapter);
+        repeatingSpinner.setOnItemSelectedListener(new RepeatingListener());
+        repeatingSpinner.setSelection(0);
 
         //Loads the details from a passed Task if one is present
         Intent intent = getIntent();
@@ -63,6 +71,8 @@ public class TaskCreator extends AppCompatActivity {
             taskName.setText(task.getName());
             timeList = task.getTimeList();
             taskDetails.setText(task.getDetails());
+            taskRepeating = task.getRepeating();
+            repeatingSpinner.setSelection(taskRepeating);
             taskPriority = task.getPriority();
             prioritySpinner.setSelection(taskPriority);
             taskRequestCodes = task.getRequestCodes();
@@ -137,7 +147,7 @@ public class TaskCreator extends AppCompatActivity {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        timeList.add(new GregorianCalendar(year, month, day));
+        timeList.add((GregorianCalendar) timeList.get(0).clone());
         addRequestCode();
         timeAdapter.notifyDataSetChanged();
     }
@@ -222,6 +232,15 @@ public class TaskCreator extends AppCompatActivity {
         }
     }
 
+    public class RepeatingListener implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            taskRepeating = pos;
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    }
+
     public void saveTask() {
         //Removes any previous versions of this task before saving it
         for (int i = 0; i < taskList.size(); i++) {
@@ -232,7 +251,12 @@ public class TaskCreator extends AppCompatActivity {
         }
 
         //Creates the task and adds it to the list
-        Task createdTask = new Task(taskName.getText().toString(), timeList, taskPriority, taskDetails.getText().toString(), taskRequestCodes);
+        Task createdTask = new Task(taskName.getText().toString(), timeList, taskRepeating, taskPriority, taskDetails.getText().toString(), taskRequestCodes);
+        if(createdTask.repeats()) {
+            while (createdTask.getTimeList().get(0).getTimeInMillis() < System.currentTimeMillis()) {
+                createdTask.repeat();
+            }
+        }
         taskList.add(createdTask);
 
         //Sends a notification to the Android alarm handler

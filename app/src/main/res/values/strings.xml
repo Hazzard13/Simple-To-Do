@@ -9,6 +9,7 @@
 
     <string name="enter_name">Task Name</string>
     <string name="enter_time">Notification Time</string>
+    <string name="enter_repeating">Repeat</string>
     <string name="enter_priority">Task Priority</string>
     <string name="enter_details">Task Description</string>
 

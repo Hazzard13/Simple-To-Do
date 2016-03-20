@@ -58,6 +58,12 @@ public class TaskListManager {
         GregorianCalendar date = new GregorianCalendar();
         date.setTimeInMillis(Long.parseLong(xmlReader.getAttributeValue(null, "Date")));
         dates.add(date);
+        int repeating;
+        if (xmlReader.getAttributeValue(null, "Repeating") != null) {
+            repeating = Integer.parseInt(xmlReader.getAttributeValue(null, "Repeating"));
+        } else {
+            repeating = 0;
+        }
         int priority = Integer.parseInt(xmlReader.getAttributeValue(null, "Priority"));
         String details = xmlReader.getAttributeValue(null, "Details");
         ArrayList<Integer> requestCodes = new ArrayList<Integer>();
@@ -76,7 +82,7 @@ public class TaskListManager {
                 skip(xmlReader);
             }
         }
-        return new Task(taskName, dates, priority, details, requestCodes);
+        return new Task(taskName, dates, repeating, priority, details, requestCodes);
     }
 
     private static void skip(XmlPullParser xmlReader) throws XmlPullParserException, IOException {
@@ -109,6 +115,7 @@ public class TaskListManager {
                 xmlWriter.startTag(null, "Task");
                 xmlWriter.attribute(null, "Name", task.getName());
                 xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(0).getTimeInMillis());
+                xmlWriter.attribute(null, "Repeating", "" + task.getRepeating());
                 xmlWriter.attribute(null, "Priority", "" + task.getPriority());
                 xmlWriter.attribute(null, "Details", task.getDetails());
                 xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(0));

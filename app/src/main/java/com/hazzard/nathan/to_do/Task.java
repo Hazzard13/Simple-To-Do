@@ -8,13 +8,15 @@ import java.util.GregorianCalendar;
 public class Task implements Serializable {
     public String name;
     public ArrayList<GregorianCalendar> timeList;
+    public int repeating;
     public int priority;
     public String details;
     public ArrayList<Integer> requestCodes;
 
-    public Task(String Name, ArrayList<GregorianCalendar> timeList, int Priority, String Details, ArrayList<Integer> RequestCodes){
+    public Task(String Name, ArrayList<GregorianCalendar> timeList, int Repeating,  int Priority, String Details, ArrayList<Integer> RequestCodes){
         this.name = Name;
         this.timeList = timeList;
+        this.repeating = Repeating;
         this.priority = Priority;
         this.details = Details;
         this.requestCodes = RequestCodes;
@@ -27,6 +29,8 @@ public class Task implements Serializable {
     public ArrayList<GregorianCalendar> getTimeList() {
         return timeList;
     }
+
+    public int getRepeating() { return repeating; }
 
     public int getPriority() {
         return priority;
@@ -82,5 +86,33 @@ public class Task implements Serializable {
             }
         }
         return isAvailable;
+    }
+
+    //0 = Don't Repeat, 1 = Daily, 2 = Weekly, 3 = BiWeekly, 4 = Monthly
+    public void repeat() {
+        switch(repeating) {
+            case 0:
+                break;
+            case 1:
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.DAY_OF_YEAR, 1);
+                } break;
+            case 2:
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 1);
+                } break;
+            case 3:
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 2);
+                } break;
+            case 4:
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.MONTH, 1);
+                } break;
+        }
+    }
+
+    public Boolean repeats() {
+        return repeating > 0;
     }
 }
