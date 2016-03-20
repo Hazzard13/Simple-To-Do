@@ -30,34 +30,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/enterDate"
-        android:text="@string/enter_date"
-        android:textSize="30dp"
-        android:textColor="#444444">
-    </TextView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/taskDate"
-        android:textAllCaps="false"
-        android:onClick="showDatePickerDialog"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/enterTime"
         android:text="@string/enter_time"
         android:textSize="30dp"
         android:textColor="#444444">
     </TextView>
 
-    <Button
-        android:layout_width="wrap_content"
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/taskTime"
-        android:onClick="showTimePickerDialog"
-        />
+        android:id="@+id/timeList">
+    </ListView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,8 +53,8 @@
     <Spinner
         android:id="@+id/priority_spinner"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content">
+    </Spinner>
 
     <TextView
         android:layout_width="wrap_content"

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        //Does some android magic around the navpane
+        //Defines layouts and functionality for the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,13 +65,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         taskList = TaskListManager.loadTaskList(this);
-        //TODO implement a method to sortTaskList by whatever it was last sorted by (Probably Preferences)
-
         taskList = TaskListManager.sortTaskList(sortBy, taskList);
         displayList();
     }
 
-    //iterates through taskList and adds every Task to displayText
+    //Iterates through taskList and adds every Task to displayText
     public void displayList() {
         ListView displayList = (ListView) findViewById(R.id.body);
         displayList.setAdapter(new TaskAdapter(this, taskList));
@@ -148,15 +146,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Currently only calls my sort operations
         switch(item.getItemId()) {
             case R.id.sort_name:
-                taskList = TaskListManager.sortTaskList(TaskListManager.NAME, taskList);
+                sortBy = TaskListManager.NAME;
+                taskList = TaskListManager.sortTaskList(sortBy, taskList);
                 Toast.makeText(MainActivity.this, "Sorted Alphabetically", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_date:
-                taskList = TaskListManager.sortTaskList(TaskListManager.DATE, taskList);
+                sortBy = TaskListManager.DATE;
+                taskList = TaskListManager.sortTaskList(sortBy, taskList);
                 Toast.makeText(MainActivity.this, "Sorted by Date", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sort_priority:
-                taskList = TaskListManager.sortTaskList(TaskListManager.PRIORITY, taskList);
+                sortBy = TaskListManager.PRIORITY;
+                taskList = TaskListManager.sortTaskList(sortBy, taskList);
                 Toast.makeText(MainActivity.this, "Sorted by Priority", Toast.LENGTH_SHORT).show();
                 break;
         }

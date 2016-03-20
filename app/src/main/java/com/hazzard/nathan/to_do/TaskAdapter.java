@@ -32,7 +32,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         imageView.setImageResource(R.drawable.checkmark);
         Title.setText(task.getName());
-        Date.setText(DateFormatter.printDate(task.getDate()) + " at " + DateFormatter.printTime(task.getDate()));
+        Date.setText(DateFormatter.printDate(task.getTimeList().get(0)) + " at " + DateFormatter.printTime(task.getTimeList().get(0)));
 
         return taskView;
     }

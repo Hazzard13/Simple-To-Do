@@ -1,7 +1,9 @@
 package com.hazzard.nathan.to_do;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Xml;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -42,6 +44,8 @@ public class TaskListManager {
                 }
             }
         } catch (Exception e) {
+            Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
         return taskList;
     }
@@ -50,15 +54,29 @@ public class TaskListManager {
         xmlReader.require(XmlPullParser.START_TAG, null, "Task");
 
         String taskName = xmlReader.getAttributeValue(null, "Name");
+        ArrayList<GregorianCalendar> dates = new ArrayList<GregorianCalendar>();
         GregorianCalendar date = new GregorianCalendar();
         date.setTimeInMillis(Long.parseLong(xmlReader.getAttributeValue(null, "Date")));
+        dates.add(date);
         int priority = Integer.parseInt(xmlReader.getAttributeValue(null, "Priority"));
         String details = xmlReader.getAttributeValue(null, "Details");
-        int requestCode = Integer.parseInt(xmlReader.getAttributeValue(null, "RequestCode"));
+        ArrayList<Integer> requestCodes = new ArrayList<Integer>();
+        requestCodes.add(Integer.parseInt(xmlReader.getAttributeValue(null, "RequestCode")));
 
-        //Ensures xmlReader is at the end of the Task before moving on
-        while (xmlReader.next() != XmlPullParser.END_TAG) {}
-        return new Task(taskName, date, priority, details, requestCode);
+        while (xmlReader.next() != XmlPullParser.END_TAG) {
+            String name = xmlReader.getName();
+            if (name.equals("Extra_Time")) {
+                date = new GregorianCalendar();
+                date.setTimeInMillis(Long.parseLong(xmlReader.getAttributeValue(null, "Date")));
+                dates.add(date);
+                requestCodes.add(Integer.parseInt(xmlReader.getAttributeValue(null, "RequestCode")));
+
+                while (xmlReader.next() != XmlPullParser.END_TAG) {}
+            } else {
+                skip(xmlReader);
+            }
+        }
+        return new Task(taskName, dates, priority, details, requestCodes);
     }
 
     private static void skip(XmlPullParser xmlReader) throws XmlPullParserException, IOException {
@@ -90,10 +108,18 @@ public class TaskListManager {
                 Task task = (Task) taskList.get(i);
                 xmlWriter.startTag(null, "Task");
                 xmlWriter.attribute(null, "Name", task.getName());
-                xmlWriter.attribute(null, "Date", "" + task.getDate().getTimeInMillis());
+                xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(0).getTimeInMillis());
                 xmlWriter.attribute(null, "Priority", "" + task.getPriority());
                 xmlWriter.attribute(null, "Details", task.getDetails());
-                xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCode());
+                xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(0));
+
+                for (int j = 1; j < task.getTimeList().size(); j++) {
+                    xmlWriter.startTag(null, "Extra_Time");
+                    xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(j).getTimeInMillis());
+                    xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(j));
+                    xmlWriter.endTag(null, "Extra_Time");
+                }
+
                 xmlWriter.endTag(null, "Task");
             }
 
@@ -102,6 +128,7 @@ public class TaskListManager {
             xmlWriter.flush();
             fileOutput.close();
         } catch (Exception e) {
+            Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
@@ -111,9 +138,8 @@ public class TaskListManager {
     final static String PRIORITY = "Priority";
 
     //Sorts the taskList according to a selection of comparators, chosen by the value of sort
-    public static ArrayList<Task> sortTaskList(String sort, ArrayList<Task> taskList)
-    {
-        switch (sort){
+    public static ArrayList<Task> sortTaskList(String sort, ArrayList<Task> taskList) {
+        switch (sort) {
             case NAME:
                 Collections.sort(taskList, new Task.NameComparator());
                 break;
