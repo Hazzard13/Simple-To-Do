@@ -50,7 +50,22 @@ public class TaskCreator extends AppCompatActivity {
         taskList = TaskListManager.loadTaskList(this);
 
         taskName = (EditText) findViewById(R.id.taskName);
-        taskDetails = (EditText) findViewById(R.id.taskDetails);
+        //Listener for the task name
+        taskName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setTitle(s.toString());
+            }
+        });
+
         Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
         priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -64,6 +79,8 @@ public class TaskCreator extends AppCompatActivity {
         repeatingSpinner.setAdapter(repeatingAdapter);
         repeatingSpinner.setOnItemSelectedListener(new RepeatingListener());
         repeatingSpinner.setSelection(0);
+
+        taskDetails = (EditText) findViewById(R.id.taskDetails);
 
         //Loads the details from a passed Task if one is present
         Intent intent = getIntent();
@@ -99,22 +116,6 @@ public class TaskCreator extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 saveTask();
-            }
-        });
-
-        //Listener for the task name
-        taskName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setTitle(s.toString());
             }
         });
     }
