@@ -15,12 +15,19 @@ public class NotificationRefresh extends BroadcastReceiver {
         NotificationHandler notifier = new NotificationHandler(context);
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);
-            if(task.repeats()) {
+            if(task.repeats() && task.getTimeList().get(0).getTimeInMillis() < System.currentTimeMillis()) {
                 while (task.getTimeList().get(0).getTimeInMillis() < System.currentTimeMillis()) {
                     task.repeat();
                 }
+
+                //Removes any previous versions of this task before saving it
+                taskList.remove(i);
+
+                //Saves the updated task and creates its notification
+                taskList.add(task);
             }
             notifier.taskNotification(task);
         }
+        TaskListManager.saveTaskList(context, taskList);
     }
 }
