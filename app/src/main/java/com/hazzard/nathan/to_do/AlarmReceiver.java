@@ -33,8 +33,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         viewIntent.putExtra("Task", task);
         PendingIntent pViewIntent = PendingIntent.getActivity(context, requestCode, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(android.R.drawable.ic_menu_search, "View", pViewIntent);
-        Notification notification = builder.build();
+        builder.setContentIntent(pViewIntent);
 
+        Intent deleteIntent = new Intent(context, com.hazzard.nathan.to_do.DeleteReceiver.class);
+        deleteIntent.putExtra("requestCode", requestCode);
+        PendingIntent deleteViewIntent = PendingIntent.getBroadcast(context, requestCode, deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.addAction(android.R.drawable.ic_menu_delete, "Delete", deleteViewIntent);
+
+        Notification notification = builder.build();
         manager.notify(requestCode, notification);
 
         if (task.repeats()) {

@@ -3,6 +3,7 @@ package com.hazzard.nathan.to_do;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,6 +77,8 @@ public class TaskCreator extends AppCompatActivity {
             taskPriority = task.getPriority();
             prioritySpinner.setSelection(taskPriority);
             taskRequestCodes = task.getRequestCodes();
+
+            ((NotificationManager) getSystemService(this.NOTIFICATION_SERVICE)).cancel(taskRequestCodes.get(0));
         } else {
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
