@@ -35,22 +35,29 @@ public class TaskCreator extends AppCompatActivity {
     public int taskPriority;
     public EditText taskDetails;
     public ArrayList<Integer> taskRequestCodes;
-    public ArrayList<Task> taskList;
 
+    public ArrayList<Task> taskList;
     public TimeAdapter timeAdapter;
     public int datePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        taskList = TaskListManager.loadTaskList(this);
+
+        //Sets up TaskCreator to load a task
         setContentView(R.layout.activity_task_creator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("New Task");
-        taskList = TaskListManager.loadTaskList(this);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveTask();
+            }
+        });
 
         taskName = (EditText) findViewById(R.id.taskName);
-        //Listener for the task name
         taskName.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -66,68 +73,70 @@ public class TaskCreator extends AppCompatActivity {
             }
         });
 
-        Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
-        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
-        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        prioritySpinner.setAdapter(priorityAdapter);
-        prioritySpinner.setOnItemSelectedListener(new PriorityListener());
-        prioritySpinner.setSelection(2);
-
         Spinner repeatingSpinner = (Spinner) findViewById(R.id.repeating_spinner);
         ArrayAdapter<CharSequence> repeatingAdapter = ArrayAdapter.createFromResource(this, R.array.repeating_array, android.R.layout.simple_spinner_item);
         repeatingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         repeatingSpinner.setAdapter(repeatingAdapter);
         repeatingSpinner.setOnItemSelectedListener(new RepeatingListener());
-        repeatingSpinner.setSelection(0);
+
+        Spinner prioritySpinner = (Spinner) findViewById(R.id.priority_spinner);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(priorityAdapter);
+        prioritySpinner.setOnItemSelectedListener(new PriorityListener());
 
         taskDetails = (EditText) findViewById(R.id.taskDetails);
 
-        //Loads the details from a passed Task if one is present
         Intent intent = getIntent();
         if (intent.hasExtra("Task")) {
+            //Loads the task that was passed
             Task task = (Task) getIntent().getSerializableExtra("Task");
             taskName.setText(task.getName());
             timeList = task.getTimeList();
             taskDetails.setText(task.getDetails());
             taskRepeating = task.getRepeating();
-            repeatingSpinner.setSelection(taskRepeating);
             taskPriority = task.getPriority();
-            prioritySpinner.setSelection(taskPriority);
             taskRequestCodes = task.getRequestCodes();
 
-            ((NotificationManager) getSystemService(this.NOTIFICATION_SERVICE)).cancel(taskRequestCodes.get(0));
+            repeatingSpinner.setSelection(taskRepeating);
+            prioritySpinner.setSelection(taskPriority);
         } else {
+            //Loads defaults for a new task
+            taskName.setText("New Task");
+
+            timeList = new ArrayList<GregorianCalendar>();
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-            timeList = new ArrayList<GregorianCalendar>();
             timeList.add(new GregorianCalendar(year, month, day));
+            timeList.get(datePosition).set(GregorianCalendar.HOUR_OF_DAY, 12);
+
+            repeatingSpinner.setSelection(0);
+
+            prioritySpinner.setSelection(2);
 
             taskRequestCodes = new ArrayList<Integer>();
             addRequestCode();
         }
 
-        displayTimes();
-
-        //Sets the floating action button to call saveTask
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveTask();
-            }
-        });
-    }
-
-    public void displayTimes() {
         ListView displayTimes = (ListView) findViewById(R.id.timeList);
         timeAdapter = new TimeAdapter(this, timeList);
         displayTimes.setAdapter(timeAdapter);
     }
 
+    public void addTime(View v) {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        timeList.add((GregorianCalendar) timeList.get(0).clone());
+        addRequestCode();
+        timeAdapter.notifyDataSetChanged();
+    }
+
     public void addRequestCode() {
-        Boolean validRequestCode = true;
+        Boolean validRequestCode;
         int newRequestCode;
         do {
             validRequestCode = true;
@@ -146,16 +155,6 @@ public class TaskCreator extends AppCompatActivity {
         taskRequestCodes.add(newRequestCode);
     }
 
-    public void addTime(View v) {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        timeList.add((GregorianCalendar) timeList.get(0).clone());
-        addRequestCode();
-        timeAdapter.notifyDataSetChanged();
-    }
-
     public void removeTime(int position) {
         timeList.remove(position);
         taskRequestCodes.remove(position);
@@ -166,13 +165,6 @@ public class TaskCreator extends AppCompatActivity {
         datePosition = position;
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
-    }
-
-    public void updateTaskDate(int year, int month, int day){
-        timeList.get(datePosition).set(GregorianCalendar.YEAR, year);
-        timeList.get(datePosition).set(GregorianCalendar.MONTH, month);
-        timeList.get(datePosition).set(GregorianCalendar.DATE, day);
-        timeAdapter.notifyDataSetChanged();
     }
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -195,16 +187,17 @@ public class TaskCreator extends AppCompatActivity {
         }
     }
 
+    public void updateTaskDate(int year, int month, int day){
+        timeList.get(datePosition).set(GregorianCalendar.YEAR, year);
+        timeList.get(datePosition).set(GregorianCalendar.MONTH, month);
+        timeList.get(datePosition).set(GregorianCalendar.DATE, day);
+        timeAdapter.notifyDataSetChanged();
+    }
+
     public void showTimePickerDialog(int position) {
         datePosition = position;
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
-    }
-
-    public void updateTaskTime(int hour, int minute){
-        timeList.get(datePosition).set(GregorianCalendar.HOUR_OF_DAY, hour);
-        timeList.get(datePosition).set(GregorianCalendar.MINUTE, minute);
-        timeAdapter.notifyDataSetChanged();
     }
 
     public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
@@ -227,18 +220,24 @@ public class TaskCreator extends AppCompatActivity {
 
     }
 
-    public class PriorityListener implements AdapterView.OnItemSelectedListener {
+    public void updateTaskTime(int hour, int minute){
+        timeList.get(datePosition).set(GregorianCalendar.HOUR_OF_DAY, hour);
+        timeList.get(datePosition).set(GregorianCalendar.MINUTE, minute);
+        timeAdapter.notifyDataSetChanged();
+    }
+
+    public class RepeatingListener implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            taskPriority = pos;
+            taskRepeating = pos;
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
         }
     }
 
-    public class RepeatingListener implements AdapterView.OnItemSelectedListener {
+    public class PriorityListener implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            taskRepeating = pos;
+            taskPriority = pos;
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
