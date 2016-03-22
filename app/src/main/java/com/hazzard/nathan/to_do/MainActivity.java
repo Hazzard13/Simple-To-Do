@@ -32,10 +32,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        sortBy = settings.getString(Settings.SORT_KEY, getResources().getString(R.string.defaultSortMethod));
-
         //This adds the navpane to the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,9 +54,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Loads the app settings
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        sortBy = settings.getString(Settings.SORT_KEY, getResources().getString(R.string.defaultSortMethod));
     }
 
-    //Loads the task list fresh from memory every time control goes back to this activity
     @Override
     protected void onResume() {
         super.onResume();
@@ -69,10 +69,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         displayList();
     }
 
-    //Iterates through taskList and adds every Task to displayText
     public void displayList() {
         ListView displayList = (ListView) findViewById(R.id.body);
         displayList.setAdapter(new TaskAdapter(this, taskList));
+
+        //Opens a task for editing if it's tapped on
         displayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -81,12 +82,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(viewTask);
             }
         });
+
+        //Gives the user a dialog box to confirm deletion of a task if a tap is held
         displayList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
                 final AlertDialog deleteAlert = new AlertDialog.Builder(parent.getContext()).create();
                 deleteAlert.setTitle("Delete?");
                 deleteAlert.setMessage("Are you sure you want to delete " + taskList.get(position).getName() + "?");
+
+                //Creates the delete button in the dialog box
                 deleteAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -96,54 +101,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         ((TaskAdapter) parent.getAdapter()).notifyDataSetChanged();
                     }
                 });
+
+                //Creates the cancel button in the dialog box
                 deleteAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
+
                 deleteAlert.show();
                 return true;
             }
         });
     }
 
-    //Overrides the back button to close the navpane if it's open
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, Settings.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     //This is where the navpane items are defined
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        //Called when an nav option is clicked, this determines what option was chosen, and reacts
-        //Currently only calls my sort operations
+        //Called when a nav option is clicked, determines what option was chosen, and reacts
         switch(item.getItemId()) {
             case R.id.sort_name:
                 sortBy = TaskListManager.NAME;
@@ -161,12 +138,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, "Sorted by Priority", Toast.LENGTH_SHORT).show();
                 break;
         }
-        //Refreshes the displayList after it's sorted
         displayList();
 
         //Closes the navpane afterwards
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //Loads the options menu in the top right
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    //Controls option selections from the menu in the top right
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
