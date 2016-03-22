@@ -1,7 +1,6 @@
 package com.hazzard.nathan.to_do;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.Xml;
 import android.widget.Toast;
 
@@ -16,9 +15,67 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
-
 public class TaskListManager {
     final static String FILENAME = "taskList";
+
+    final static String NAME = "Name";
+    final static String DATE = "Date";
+    final static String PRIORITY = "Priority";
+
+    public static ArrayList<Task> sortTaskList(String sort, ArrayList<Task> taskList) {
+        switch (sort) {
+            case NAME:
+                Collections.sort(taskList, new Task.NameComparator());
+                break;
+            case DATE:
+                Collections.sort(taskList, new Task.DueDateComparator());
+                break;
+            case PRIORITY:
+                Collections.sort(taskList, new Task.PriorityComparator());
+                break;
+            default:
+                break;
+        }
+        return taskList;
+    }
+
+    public static void saveTaskList(Context context, ArrayList taskList) {
+        try {
+            FileOutputStream fileOutput = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            XmlSerializer xmlWriter = Xml.newSerializer();
+            xmlWriter.setOutput(fileOutput, "UTF-8");
+            xmlWriter.startDocument("UTF-8", true);
+            xmlWriter.startTag(null, "TaskList");
+
+            for (int i = 0; i < taskList.size(); i++) {
+                Task task = (Task) taskList.get(i);
+                xmlWriter.startTag(null, "Task");
+                xmlWriter.attribute(null, "Name", task.getName());
+                xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(0).getTimeInMillis());
+                xmlWriter.attribute(null, "Repeating", "" + task.getRepeating());
+                xmlWriter.attribute(null, "Priority", "" + task.getPriority());
+                xmlWriter.attribute(null, "Details", task.getDetails());
+                xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(0));
+
+                for (int j = 1; j < task.getTimeList().size(); j++) {
+                    xmlWriter.startTag(null, "Extra_Time");
+                    xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(j).getTimeInMillis());
+                    xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(j));
+                    xmlWriter.endTag(null, "Extra_Time");
+                }
+
+                xmlWriter.endTag(null, "Task");
+            }
+
+            xmlWriter.endTag(null, "TaskList");
+            xmlWriter.endDocument();
+            xmlWriter.flush();
+            fileOutput.close();
+        } catch (Exception e) {
+            Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 
     public static ArrayList<Task> loadTaskList(Context context) {
         ArrayList taskList = new ArrayList();
@@ -100,65 +157,5 @@ public class TaskListManager {
                     break;
             }
         }
-    }
-
-    public static void saveTaskList(Context context, ArrayList taskList) {
-        try {
-            FileOutputStream fileOutput = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            XmlSerializer xmlWriter = Xml.newSerializer();
-            xmlWriter.setOutput(fileOutput, "UTF-8");
-            xmlWriter.startDocument("UTF-8", true);
-            xmlWriter.startTag(null, "TaskList");
-
-            for (int i = 0; i < taskList.size(); i++) {
-                Task task = (Task) taskList.get(i);
-                xmlWriter.startTag(null, "Task");
-                xmlWriter.attribute(null, "Name", task.getName());
-                xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(0).getTimeInMillis());
-                xmlWriter.attribute(null, "Repeating", "" + task.getRepeating());
-                xmlWriter.attribute(null, "Priority", "" + task.getPriority());
-                xmlWriter.attribute(null, "Details", task.getDetails());
-                xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(0));
-
-                for (int j = 1; j < task.getTimeList().size(); j++) {
-                    xmlWriter.startTag(null, "Extra_Time");
-                    xmlWriter.attribute(null, "Date", "" + task.getTimeList().get(j).getTimeInMillis());
-                    xmlWriter.attribute(null, "RequestCode", "" + task.getRequestCodes().get(j));
-                    xmlWriter.endTag(null, "Extra_Time");
-                }
-
-                xmlWriter.endTag(null, "Task");
-            }
-
-            xmlWriter.endTag(null, "TaskList");
-            xmlWriter.endDocument();
-            xmlWriter.flush();
-            fileOutput.close();
-        } catch (Exception e) {
-            Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
-
-    final static String NAME = "Name";
-    final static String DATE = "Date";
-    final static String PRIORITY = "Priority";
-
-    //Sorts the taskList according to a selection of comparators, chosen by the value of sort
-    public static ArrayList<Task> sortTaskList(String sort, ArrayList<Task> taskList) {
-        switch (sort) {
-            case NAME:
-                Collections.sort(taskList, new Task.NameComparator());
-                break;
-            case DATE:
-                Collections.sort(taskList, new Task.DueDateComparator());
-                break;
-            case PRIORITY:
-                Collections.sort(taskList, new Task.PriorityComparator());
-                break;
-            default:
-                break;
-        }
-        return taskList;
     }
 }

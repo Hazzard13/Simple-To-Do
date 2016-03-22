@@ -21,20 +21,23 @@ public class AlarmReceiver extends BroadcastReceiver {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(context);
-        builder.setSound(Uri.parse(settings.getString(Settings.RINGTONE_KEY, "default ringtone")));
-        if(settings.getBoolean(Settings.VIBRATE_KEY, true)) {
-            builder.setVibrate(new long[]{0, 200});
-        }
         builder.setSmallIcon(R.drawable.checkmark);
         builder.setContentTitle(task.getName());
         builder.setContentText(DateFormatter.printDate(task.getTimeList().get(0)) + " at " + DateFormatter.printTime(task.getTimeList().get(0)));
 
+        builder.setSound(Uri.parse(settings.getString(Settings.RINGTONE_KEY, "default ringtone")));
+        if(settings.getBoolean(Settings.VIBRATE_KEY, true)) {
+            builder.setVibrate(new long[]{0, 200});
+        }
+
+        //Sets the notification to open the task for viewing when tapped
         Intent viewIntent = new Intent(context, TaskCreator.class);
         viewIntent.putExtra("Task", task);
         PendingIntent pViewIntent = PendingIntent.getActivity(context, requestCode, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(android.R.drawable.ic_menu_search, "View", pViewIntent);
         builder.setContentIntent(pViewIntent);
 
+        //Creates the delete button on the notification
         Intent deleteIntent = new Intent(context, com.hazzard.nathan.to_do.DeleteReceiver.class);
         deleteIntent.putExtra("requestCode", requestCode);
         PendingIntent deleteViewIntent = PendingIntent.getBroadcast(context, requestCode, deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -43,19 +46,16 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = builder.build();
         manager.notify(requestCode, notification);
 
+        //Updates the task if it's set to repeat
         if (task.repeats()) {
             task.repeat();
-
             ArrayList<Task> taskList = TaskListManager.loadTaskList(context);
-            //Removes any previous versions of this task before saving it
             for (int i = 0; i < taskList.size(); i++) {
                 if(taskList.get(i).getRequestCodes().get(0).equals(task.getRequestCodes().get(0))) {
                     NotificationHandler.clearNotification(context, taskList.get(i));
                     taskList.remove(i);
                 }
             }
-
-            //Saves the updated task and creates its notification
             taskList.add(task);
             (new NotificationHandler(context)).taskNotification(task);
             TaskListManager.saveTaskList(context, taskList);

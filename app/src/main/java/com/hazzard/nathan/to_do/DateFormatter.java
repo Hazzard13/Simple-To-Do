@@ -83,27 +83,25 @@ public class DateFormatter {
 
     public static String printTime(GregorianCalendar date) {
         String printTime = "";
-        switch (date.get(Calendar.HOUR)) {
-            case 0:
-                printTime += 12;
-                break;
-            default:
-                printTime += date.get(Calendar.HOUR);
-                break;
+
+        if (date.get(Calendar.HOUR) == 0) {
+            printTime += 12;
+        } else {
+            printTime += date.get(Calendar.HOUR);
         }
+
         printTime += ":";
         if (date.get(Calendar.MINUTE) < 10) {
             printTime += 0;
         }
         printTime += date.get(Calendar.MINUTE);
-        switch (date.get(Calendar.AM_PM)) {
-            case 0:
-                printTime += "AM";
-                break;
-            case 1:
-                printTime += "PM";
-                break;
+
+        if (date.get(Calendar.AM_PM) == 0) {
+            printTime += "AM";
+        } else {
+            printTime += "PM";
         }
+
         return printTime;
     }
 }

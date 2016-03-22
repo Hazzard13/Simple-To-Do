@@ -22,30 +22,50 @@ public class Task implements Serializable {
         this.requestCodes = RequestCodes;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public ArrayList<GregorianCalendar> getTimeList() {
-        return timeList;
-    }
-
-    public int getRepeating() { return repeating; }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public ArrayList<Integer> getRequestCodes() {
-        return requestCodes;
-    }
-
     public String toString() {
         return name + ": " + DateFormatter.printDate(timeList.get(0)) + "\n";
+    }
+
+    //These values are defined in arrays.xml
+    public void repeat() {
+        switch(repeating) {
+            case 0:
+                break;
+            case 1:
+                //Daily repeat
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.DAY_OF_YEAR, 1);
+                } break;
+            case 2:
+                //Weekly repeat
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 1);
+                } break;
+            case 3:
+                //Biweekly repeat
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 2);
+                } break;
+            case 4:
+                //Monthly repeat
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).add(GregorianCalendar.MONTH, 1);
+                } break;
+        }
+    }
+
+    public Boolean isValidRequestCode(int requestCode) {
+        Boolean isAvailable = true;
+        for (int i = 0; i < requestCodes.size(); i++) {
+            if (requestCode == requestCodes.get(i)) {
+                isAvailable = false;
+            }
+        }
+        return isAvailable;
+    }
+
+    public Boolean repeats() {
+        return repeating > 0;
     }
 
     static class NameComparator implements Comparator<Task>
@@ -78,41 +98,27 @@ public class Task implements Serializable {
         }
     }
 
-    public Boolean isValidRequestCode(int requestCode) {
-        Boolean isAvailable = true;
-        for (int i = 0; i < requestCodes.size(); i++) {
-            if (requestCode == requestCodes.get(i)) {
-                isAvailable = false;
-            }
-        }
-        return isAvailable;
+    public String getName() {
+        return name;
     }
 
-    //0 = Don't Repeat, 1 = Daily, 2 = Weekly, 3 = BiWeekly, 4 = Monthly
-    public void repeat() {
-        switch(repeating) {
-            case 0:
-                break;
-            case 1:
-                for (int i = 0; i < timeList.size(); i++) {
-                    timeList.get(i).add(GregorianCalendar.DAY_OF_YEAR, 1);
-                } break;
-            case 2:
-                for (int i = 0; i < timeList.size(); i++) {
-                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 1);
-                } break;
-            case 3:
-                for (int i = 0; i < timeList.size(); i++) {
-                    timeList.get(i).add(GregorianCalendar.WEEK_OF_YEAR, 2);
-                } break;
-            case 4:
-                for (int i = 0; i < timeList.size(); i++) {
-                    timeList.get(i).add(GregorianCalendar.MONTH, 1);
-                } break;
-        }
+    public ArrayList<GregorianCalendar> getTimeList() {
+        return timeList;
     }
 
-    public Boolean repeats() {
-        return repeating > 0;
+    public int getRepeating() {
+        return repeating;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public ArrayList<Integer> getRequestCodes() {
+        return requestCodes;
     }
 }

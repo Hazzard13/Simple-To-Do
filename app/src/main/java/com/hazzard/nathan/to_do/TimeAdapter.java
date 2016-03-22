@@ -23,7 +23,6 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GregorianCalendar time = timeList.get(position);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View timeView = inflater.inflate(R.layout.time_layout, parent, false);
 
@@ -35,12 +34,12 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
         timeButton.setText(DateFormatter.printTime(timeList.get(position)));
         timeButton.setOnClickListener(createTimeListener(parent, position));
 
-        ImageButton addTime = (ImageButton) timeView.findViewById(R.id.addTime);
+        ImageButton addNewTime = (ImageButton) timeView.findViewById(R.id.addTime);
         if (position == 0) {
-            addTime.setBackgroundResource(android.R.drawable.ic_input_add);
+            addNewTime.setBackgroundResource(android.R.drawable.ic_input_add);
         } else {
-            addTime.setBackgroundResource(android.R.drawable.ic_delete);
-            addTime.setOnClickListener(createDeleteListener(parent, position));
+            addNewTime.setBackgroundResource(android.R.drawable.ic_delete);
+            addNewTime.setOnClickListener(createDeleteListener(parent, position));
         }
 
         return timeView;
