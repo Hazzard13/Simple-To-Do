@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class TaskCreator extends AppCompatActivity {
+public class TaskEditor extends AppCompatActivity {
     public EditText taskName;
     public ArrayList<GregorianCalendar> timeList;
     public int taskRepeating;
@@ -44,7 +44,7 @@ public class TaskCreator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         taskList = TaskListManager.loadTaskList(this);
 
-        //Sets up TaskCreator to load a task
+        //Sets up TaskEditor to load a task
         setContentView(R.layout.activity_task_creator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -170,7 +170,7 @@ public class TaskCreator extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current timeList as the default timeList in the picker
-            TaskCreator activity = ((TaskCreator) getActivity());
+            TaskEditor activity = ((TaskEditor) getActivity());
             final Calendar c = (activity.timeList.get((activity.datePosition)));
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
@@ -182,7 +182,7 @@ public class TaskCreator extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Returns the user's selected timeList
-            ((TaskCreator) getActivity()).updateTaskDate(year, month, day);
+            ((TaskEditor) getActivity()).updateTaskDate(year, month, day);
         }
     }
 
@@ -203,7 +203,7 @@ public class TaskCreator extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            TaskCreator activity = ((TaskCreator) getActivity());
+            TaskEditor activity = ((TaskEditor) getActivity());
             final Calendar c = (activity.timeList.get((activity.datePosition)));
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
@@ -214,7 +214,7 @@ public class TaskCreator extends AppCompatActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
-            ((TaskCreator) getActivity()).updateTaskTime(hourOfDay, minute);
+            ((TaskEditor) getActivity()).updateTaskTime(hourOfDay, minute);
         }
 
     }
@@ -266,7 +266,7 @@ public class TaskCreator extends AppCompatActivity {
 
         //Saves the list back to memory and ends the activity
         TaskListManager.saveTaskList(this, taskList);
-        Toast.makeText(TaskCreator.this, "Task Saved", Toast.LENGTH_SHORT).show();
+        Toast.makeText(TaskEditor.this, "Task Saved", Toast.LENGTH_SHORT).show();
         this.finish();
     }
 }

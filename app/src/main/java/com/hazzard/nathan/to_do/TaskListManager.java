@@ -78,7 +78,7 @@ public class TaskListManager {
     }
 
     public static ArrayList<Task> loadTaskList(Context context) {
-        ArrayList taskList = new ArrayList();
+        ArrayList<Task> taskList = new ArrayList();
         try {
             FileInputStream inputStream = context.openFileInput(FILENAME);
             XmlPullParser xmlReader = Xml.newPullParser();
@@ -101,8 +101,8 @@ public class TaskListManager {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+            //Toast.makeText(context, "Loading Failed", Toast.LENGTH_LONG).show();
+            //e.printStackTrace();
         }
         return taskList;
     }

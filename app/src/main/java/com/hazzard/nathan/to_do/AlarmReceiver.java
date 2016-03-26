@@ -31,7 +31,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         //Sets the notification to open the task for viewing when tapped
-        Intent viewIntent = new Intent(context, TaskCreator.class);
+        Intent viewIntent = new Intent(context, TaskEditor.class);
         viewIntent.putExtra("Task", task);
         PendingIntent pViewIntent = PendingIntent.getActivity(context, requestCode, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(android.R.drawable.ic_menu_search, "View", pViewIntent);

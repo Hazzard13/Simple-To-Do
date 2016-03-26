@@ -49,7 +49,7 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TaskCreator) parent.getContext()).showDatePickerDialog(position);
+                ((TaskEditor) parent.getContext()).showDatePickerDialog(position);
             }
         };
     }
@@ -58,7 +58,7 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TaskCreator) parent.getContext()).showTimePickerDialog(position);
+                ((TaskEditor) parent.getContext()).showTimePickerDialog(position);
             }
         };
     }
@@ -67,7 +67,7 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TaskCreator) parent.getContext()).removeTime(position);
+                ((TaskEditor) parent.getContext()).removeTime(position);
             }
         };
     }
