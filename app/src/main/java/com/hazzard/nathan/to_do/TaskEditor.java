@@ -45,7 +45,7 @@ public class TaskEditor extends AppCompatActivity {
         taskList = TaskListManager.loadTaskList(this);
 
         //Sets up TaskEditor to load a task
-        setContentView(R.layout.activity_task_creator);
+        setContentView(R.layout.activity_task_editor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
