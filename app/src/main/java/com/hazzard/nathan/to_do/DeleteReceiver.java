@@ -11,6 +11,7 @@ public class DeleteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int requestCode = (int) intent.getSerializableExtra("requestCode");
+        NotificationHandler.dismissNotification(context, requestCode);
 
         ArrayList<Task> taskList = TaskListManager.loadTaskList(context);
         for (int i = 0; i < taskList.size(); i++) {

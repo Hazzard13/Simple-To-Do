@@ -99,6 +99,9 @@ public class TaskEditor extends AppCompatActivity {
 
             repeatingSpinner.setSelection(taskRepeating);
             prioritySpinner.setSelection(taskPriority);
+            if (intent.hasExtra("requestCode")) {
+                NotificationHandler.dismissNotification(this, (int) getIntent().getIntExtra("requestCode", 0));
+            }
         } else {
             //Loads defaults for a new task
             taskName.setText("New Task");

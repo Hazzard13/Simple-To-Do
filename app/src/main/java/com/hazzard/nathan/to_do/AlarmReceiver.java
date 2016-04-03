@@ -24,6 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setSmallIcon(R.drawable.checkmark);
         builder.setContentTitle(task.getName());
         builder.setContentText(DateFormatter.printDate(task.getTimeList().get(0)) + " at " + DateFormatter.printTime(task.getTimeList().get(0)));
+        builder.setAutoCancel(true);
 
         builder.setSound(Uri.parse(settings.getString(Settings.RINGTONE_KEY, "default ringtone")));
         if(settings.getBoolean(Settings.VIBRATE_KEY, true)) {
@@ -33,6 +34,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Sets the notification to open the task for viewing when tapped
         Intent viewIntent = new Intent(context, TaskEditor.class);
         viewIntent.putExtra("Task", task);
+        viewIntent.putExtra("requestCode", requestCode);
         PendingIntent pViewIntent = PendingIntent.getActivity(context, requestCode, viewIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(android.R.drawable.ic_menu_search, "View", pViewIntent);
         builder.setContentIntent(pViewIntent);

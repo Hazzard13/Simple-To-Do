@@ -12,7 +12,6 @@
         android:maxWidth="60dp"
         android:maxHeight="60dp"
         android:scaleType="fitCenter"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:paddingTop="4dip"
@@ -21,20 +20,9 @@
         android:src="@drawable/checkmark" />
 
     <TextView
-        android:id="@+id/secondLine"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/firstLine"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
@@ -42,5 +30,17 @@
         android:textStyle="bold"
         android:gravity="center_vertical"
         android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/icon"
+        android:layout_below="@+id/firstLine"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textSize="16sp" />
 
 </RelativeLayout>

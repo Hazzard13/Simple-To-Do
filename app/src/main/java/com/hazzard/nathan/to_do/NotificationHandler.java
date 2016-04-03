@@ -46,4 +46,8 @@ public class NotificationHandler {
             }
         }
     }
+
+    public static void dismissNotification(Context context, int requestCode) {
+        ((NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE)).cancel(requestCode);
+    }
 }
