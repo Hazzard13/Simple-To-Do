@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * TaskAdapter is a modified ArrayAdapter used to load tasks into MainActivity
+ * It loads each task from the array, and provides them with a view to be added to the ListView the adapter is attached to
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,5 +1,15 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * Task is the special class used to store a user's task
+ * It holds all details about the task with getter and setter methods
+ * And holds a couple special methods to repeat the task and compare requestCodes
+ * And also holds the comparators for proper task sorting
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;

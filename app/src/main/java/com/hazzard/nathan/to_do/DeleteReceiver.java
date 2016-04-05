@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * DeleteReceiver is a specialised BroadcastReceiver that responds to the broadcasts from a task notification's delete button
+ * It takes the requestCode from the broadcast intent and deletes the task from the saved taskList
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

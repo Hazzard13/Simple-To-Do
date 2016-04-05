@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * TaskListManager is a collection of static methods that handle all the XML work behind saving and loading the TaskList
+ * It also contains the sort method
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.content.Context;
 import android.util.Xml;
 import android.widget.Toast;

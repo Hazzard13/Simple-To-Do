@@ -1,5 +1,14 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * AlarmReceiver is a specialised BroadcastReceiver that responds to the android AlarmManager's Task broadcasts
+ * It creates the customized task notification that will be displayed, and displays it to the user.
+ * It's also responsible for repeating tasks at their due date
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

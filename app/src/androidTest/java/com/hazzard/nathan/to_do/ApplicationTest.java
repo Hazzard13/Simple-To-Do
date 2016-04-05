@@ -1,5 +1,14 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * ApplicationTest is the Instrumentation Test Class
+ * It's launched separately from the app, and only exists in Android Studio
+ * This runs some basic tests on the taskList XML to make sure it saves and loads correctly
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;

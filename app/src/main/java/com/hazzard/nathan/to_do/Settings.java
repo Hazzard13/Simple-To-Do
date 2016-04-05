@@ -1,7 +1,14 @@
 package com.hazzard.nathan.to_do;
 
-import android.support.v7.app.AppCompatActivity;
+/**
+ * Settings is a simple activity that loads the SettingsFragment
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class Settings extends AppCompatActivity {
     final static String SORT_KEY = "defaultSort";

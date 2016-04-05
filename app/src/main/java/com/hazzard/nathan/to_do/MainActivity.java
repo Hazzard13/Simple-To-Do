@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * MainActivity is the activity that appears when launching the app.
+ * MainActivity loads and displays the saved TaskList with TaskAdapter, and is where the user accesses the rest of the app's features
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;

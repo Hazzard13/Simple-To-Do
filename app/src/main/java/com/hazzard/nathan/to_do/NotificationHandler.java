@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * NotificationHandler is a collection of methods containing everything Simple To-Do does with notifications
+ * It's used to create, remove, and dismiss notifications
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

@@ -1,5 +1,12 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * DateFormatter is a collection of static methods designed to create clean human-readable strings from the built-in GregorianCalendar
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 

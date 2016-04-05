@@ -1,5 +1,14 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * TaskEditor loads all the details from a passed task, and displays them for editing
+ * It also attaches each variable to a UI element, and contains all the methods and listeners for them
+ * It also creates a new task if one is not passed in the intent
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -101,7 +109,7 @@ public class TaskEditor extends AppCompatActivity {
             repeatingSpinner.setSelection(taskRepeating);
             prioritySpinner.setSelection(taskPriority);
             if (intent.hasExtra("requestCode")) {
-                NotificationHandler.dismissNotification(this, (int) getIntent().getIntExtra("requestCode", 0));
+                NotificationHandler.dismissNotification(this, getIntent().getIntExtra("requestCode", 0));
             }
         } else {
             //Loads defaults for a new task
@@ -127,15 +135,6 @@ public class TaskEditor extends AppCompatActivity {
         timeAdapter = new TimeAdapter(this, timeList, displayTimes);
         displayTimes.setAdapter(timeAdapter);
         timeAdapter.notifyDataSetChanged();
-
-        //This is a workaround for the ListView, to prevent the ScrollView it's nested in from stealing its touchEvents
-        displayTimes.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
         }
 
     public void addTime(View v) {

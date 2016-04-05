@@ -1,5 +1,14 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * TimeAdapter is a modified adapter that loads extra times into the Task Editor
+ * It loads each time from the task, and provides them with a view to be added to the ListView the adapter is attached to
+ * It also has a workaround so that the ListView can be placed into a ScrollView
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

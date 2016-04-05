@@ -1,5 +1,13 @@
 package com.hazzard.nathan.to_do;
 
+/**
+ * NotificationRefresh is a specialised BroadcastReceiver that only runs at system launch
+ * It reloads all notifications into the android alarmManager, and performs any changes that should have happened when the device was off
+ *
+ * Nathan Hazzard
+ * Version 1.1.6
+ */
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
