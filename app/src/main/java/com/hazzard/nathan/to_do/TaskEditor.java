@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -123,15 +124,21 @@ public class TaskEditor extends AppCompatActivity {
         }
 
         ListView displayTimes = (ListView) findViewById(R.id.timeList);
-        timeAdapter = new TimeAdapter(this, timeList);
+        timeAdapter = new TimeAdapter(this, timeList, displayTimes);
         displayTimes.setAdapter(timeAdapter);
-    }
+        timeAdapter.notifyDataSetChanged();
+
+        //This is a workaround for the ListView, to prevent the ScrollView it's nested in from stealing its touchEvents
+        displayTimes.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+        }
 
     public void addTime(View v) {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
         timeList.add((GregorianCalendar) timeList.get(0).clone());
         addRequestCode();
         timeAdapter.notifyDataSetChanged();
