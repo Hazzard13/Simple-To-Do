@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+activity_main_drawer.xml contains the items that are displayed in the pullout drawer
+The header is defined in nav_header_main.xml
+
+Nathan Hazzard
+Version 1.1.6
+!-->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">

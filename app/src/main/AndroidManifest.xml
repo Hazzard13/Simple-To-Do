@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+AndroidManifest.xml defines every activity and receiver for the Android system, along with all the permissions the app needs.
+
+Nathan Hazzard
+Version 1.1.6
+!-->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hazzard.nathan.to_do">
 

@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+activity_task_editor.xml defines the basic layout of taskEditor.
+It describes the app bar and floating action button, and loads the content in from content_task_editor.xml
+
+Nathan Hazzard
+Version 1.1.6
+!-->
+
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,8 +23,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
-            android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.design.widget.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

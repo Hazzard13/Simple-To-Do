@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+task_layout.xml is the layout used by TaskAdapter, and is applied to each task.
+It gets applied to the ListView in content_main.xml
+
+Nathan Hazzard
+Version 1.1.6
+!-->
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

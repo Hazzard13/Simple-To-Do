@@ -1,3 +1,10 @@
+<!--
+strings.xml contains a few key strings in one place, so I can easily edit the app's text from one location
+
+Nathan Hazzard
+Version 1.1.6
+!-->
+
 <resources>
     <string name="app_name">To-Do</string>
 
