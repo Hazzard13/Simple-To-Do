@@ -20,7 +20,7 @@ import java.util.GregorianCalendar;
 public class NotificationHandler {
     private NotificationManager manager;
     private AlarmManager alarmManager;
-    private Context CONTEXT;
+    private static Context CONTEXT;
 
     public NotificationHandler(Context context) {
         CONTEXT = context;

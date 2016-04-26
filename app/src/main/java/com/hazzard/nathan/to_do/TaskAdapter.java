@@ -29,19 +29,39 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View taskView, ViewGroup parent) {
         Task task = taskList.get(position);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View taskView = inflater.inflate(R.layout.task_layout, parent, false);
+        ViewHolder viewHolder;
 
-        ImageView imageView = (ImageView) taskView.findViewById(R.id.icon);
-        TextView Title = (TextView) taskView.findViewById(R.id.firstLine);
-        TextView Date = (TextView) taskView.findViewById(R.id.secondLine);
+        if(taskView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            taskView = inflater.inflate(R.layout.task_layout, parent, false);
+            viewHolder = new ViewHolder(taskView);
+            taskView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder)taskView.getTag();
+        }
+
+        ImageView imageView = viewHolder.imageView;
+        TextView Title = viewHolder.title;
+        TextView Date = viewHolder.date;
 
         imageView.setImageResource(R.drawable.checkmark);
         Title.setText(task.getName());
         Date.setText(DateFormatter.printDate(task.getTimeList().get(0)) + " at " + DateFormatter.printTime(task.getTimeList().get(0)));
 
         return taskView;
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
+        TextView title;
+        TextView date;
+
+        public ViewHolder(View view) {
+            imageView = (ImageView)view.findViewById(R.id.icon);
+            title = (TextView)view.findViewById(R.id.firstLine);
+            date = (TextView)view.findViewById(R.id.secondLine);
+        }
     }
 }

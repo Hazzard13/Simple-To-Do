@@ -47,7 +47,7 @@ public class TaskListManager {
         return taskList;
     }
 
-    public static void saveTaskList(Context context, ArrayList taskList) {
+    public static void saveTaskList(Context context, ArrayList<Task> taskList) {
         try {
             FileOutputStream fileOutput = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             XmlSerializer xmlWriter = Xml.newSerializer();
@@ -115,7 +115,7 @@ public class TaskListManager {
         return taskList;
     }
 
-    public static Task readTask(XmlPullParser xmlReader) throws IOException, XmlPullParserException {
+    private static Task readTask(XmlPullParser xmlReader) throws IOException, XmlPullParserException {
         xmlReader.require(XmlPullParser.START_TAG, null, "Task");
 
         String taskName = xmlReader.getAttributeValue(null, "Name");
