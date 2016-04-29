@@ -42,11 +42,9 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             viewHolder = (ViewHolder)taskView.getTag();
         }
 
-        ImageView imageView = viewHolder.imageView;
         TextView Title = viewHolder.title;
         TextView Date = viewHolder.date;
 
-        imageView.setImageResource(R.drawable.checkmark);
         Title.setText(task.getName());
         Date.setText(DateFormatter.printDate(task.getTimeList().get(0)) + " at " + DateFormatter.printTime(task.getTimeList().get(0)));
 

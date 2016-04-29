@@ -12,10 +12,13 @@ Version 1.1.6
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/sort_name"
-            android:title="Task Name"/>
+            android:icon="@drawable/ic_sort_by_alpha_black_18dp"
+            android:title="Task Name" />
         <item android:id="@+id/sort_date"
+            android:icon="@drawable/ic_date_range_black_18dp"
             android:title="Due Date" />
         <item android:id="@+id/sort_priority"
+            android:icon="@drawable/ic_priority_high_black_18dp"
             android:title="Priority" />
     </group>
 

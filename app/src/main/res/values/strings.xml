@@ -6,13 +6,13 @@ Version 1.1.6
 !-->
 
 <resources>
-    <string name="app_name">To-Do</string>
+    <string name="app_name">Undone</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_new_task">NewTask</string>
+    <string name="title_activity_new_task">New Task</string>
 
     <string name="enter_name">Task Name</string>
     <string name="enter_time">Notification Time</string>

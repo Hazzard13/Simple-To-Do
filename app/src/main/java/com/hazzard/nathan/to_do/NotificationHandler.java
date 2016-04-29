@@ -21,7 +21,6 @@ public class NotificationHandler {
     private NotificationManager manager;
     private AlarmManager alarmManager;
     private static Context CONTEXT;
-
     public NotificationHandler(Context context) {
         CONTEXT = context;
         manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);

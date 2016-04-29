@@ -48,11 +48,9 @@ public class TimeAdapter extends ArrayAdapter<GregorianCalendar> {
         timeButton.setText(DateFormatter.printTime(timeList.get(position)));
         timeButton.setOnClickListener(createTimeListener(parent, position));
 
-        ImageButton addNewTime = (ImageButton) timeView.findViewById(R.id.addTime);
-        if (position == 0) {
-            addNewTime.setBackgroundResource(android.R.drawable.ic_input_add);
-        } else {
-            addNewTime.setBackgroundResource(android.R.drawable.ic_delete);
+        if (position != 0) {
+            ImageButton addNewTime = (ImageButton) timeView.findViewById(R.id.addTime);
+            addNewTime.setImageResource(R.drawable.ic_delete_forever_accent_36dp);
             addNewTime.setOnClickListener(createDeleteListener(parent, position));
         }
 

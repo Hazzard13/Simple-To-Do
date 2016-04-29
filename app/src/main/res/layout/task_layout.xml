@@ -26,7 +26,7 @@ Version 1.1.6
         android:paddingTop="4dip"
         android:paddingBottom="4dip"
         android:contentDescription="TODO"
-        android:src="@drawable/checkmark" />
+        android:src="@drawable/ic_check_dark_36dp" />
 
     <TextView
         android:id="@+id/firstLine"
@@ -36,8 +36,8 @@ Version 1.1.6
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/icon"
-        android:textStyle="bold"
         android:gravity="center_vertical"
+        android:alpha="0.87"
         android:textSize="24sp" />
 
     <TextView
@@ -50,6 +50,7 @@ Version 1.1.6
         android:layout_below="@+id/firstLine"
         android:ellipsize="marquee"
         android:singleLine="true"
+        android:alpha="0.54"
         android:textSize="16sp" />
 
 </RelativeLayout>

@@ -67,6 +67,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         sortBy = settings.getString(Settings.SORT_KEY, getResources().getString(R.string.defaultSortMethod));
+
+        //Highlights the correct option in the navigation drawer, based on the selected sorting method
+        switch(sortBy) {
+            case TaskListManager.NAME:
+                navigationView.getMenu().getItem(0).setChecked(true);
+                break;
+            case TaskListManager.DATE:
+                navigationView.getMenu().getItem(1).setChecked(true);
+                break;
+            case TaskListManager.PRIORITY:
+                navigationView.getMenu().getItem(2).setChecked(true);
+                break;
+        }
     }
 
     @Override
